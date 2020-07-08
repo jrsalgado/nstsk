@@ -49,3 +49,8 @@ plan:
 .PHONY: apply
 apply:
 	$(TERRAFORM) apply -var 'aws_profile=$(aws_profile)' -var-file=vars_${app_env}.tfvars
+
+# Terraform destroy
+.PHONY: destroy
+destroy:
+	$(TERRAFORM) destroy -var 'aws_profile=$(aws_profile)' -var-file=vars_${app_env}.tfvars
