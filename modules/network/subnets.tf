@@ -1,4 +1,3 @@
-## Define the public subnets
 resource "aws_subnet" "public_subnets" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.public_subnet_cidrs[count.index]
@@ -10,7 +9,6 @@ resource "aws_subnet" "public_subnets" {
   }
 }
 
-## Define the private subnets
 resource "aws_subnet" "private_subnets" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_subnet_cidrs[count.index]
