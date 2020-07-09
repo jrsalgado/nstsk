@@ -7,7 +7,7 @@ tf_versions ?= 0.12.21
 # Select platform
 platform ?= cloud
 # Select application environment (dev, stage, prod)
-app_env ?= acambera
+app_env ?= dev
 
 # Terraform container
 TERRAFORM := docker run -i -t \
