@@ -1,7 +1,7 @@
 resource "aws_internet_gateway" "gateway" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "Internet Gateway"
+    Name = "${var.prefix} - Internet Gateway"
   }
 }
 
@@ -14,7 +14,7 @@ resource "aws_route_table" "route_table_public" {
   }
 
   tags = {
-    Name = "FrontEnd Subnet"
+    Name = "${var.prefix} - FrontEnd Subnet"
   }
 }
 

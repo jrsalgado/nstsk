@@ -5,7 +5,7 @@ resource "aws_subnet" "public_subnets" {
   count             = 2
 
   tags = {
-    Name = "FrontEnd - Public Subnet - ${count.index + 1}"
+    Name = "${var.prefix} - Public Subnet - ${count.index + 1}"
   }
 }
 
@@ -16,6 +16,6 @@ resource "aws_subnet" "private_subnets" {
   count             = 2
 
   tags = {
-    Name = "BackEnd - Private Subnet - ${count.index + 1}"
+    Name = "${var.prefix} - Private Subnet - ${count.index + 1}"
   }
 }

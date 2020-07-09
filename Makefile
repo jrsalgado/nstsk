@@ -7,7 +7,7 @@ tf_versions ?= 0.12.21
 # Select platform
 platform ?= cloud
 # Select application environment (dev, stage, prod)
-app_env ?= dev
+app_env ?= acambera
 
 # Terraform container
 TERRAFORM := docker run -i -t \
@@ -36,21 +36,21 @@ bash:
 .PHONY: init
 init:
 	$(TERRAFORM) init \
-	  -backend-config="key=Task/${app_env}" \
+	  -backend-config="key=Task/${app_env}/${platform}" \
 		-backend-config="bucket=$(bucket_name)" \
-		-backend-config="profile=$(aws_profile)"
+		-backend-config="profile=$(aws_profile)" 
 
 # Terraform plan
 .PHONY: plan
 plan:
-	$(TERRAFORM) plan -var 'aws_profile=$(aws_profile)' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) plan -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Terraform apply
 .PHONY: apply
 apply:
-	$(TERRAFORM) apply -var 'aws_profile=$(aws_profile)' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) apply -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Terraform destroy
 .PHONY: destroy
 destroy:
-	$(TERRAFORM) destroy -var 'aws_profile=$(aws_profile)' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) destroy -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
