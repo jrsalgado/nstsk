@@ -3,6 +3,9 @@ resource "aws_nat_gateway" "nat" {
   allocation_id = element(aws_eip.nat.*.id, count.index)
   subnet_id     = element(aws_subnet.public_subnets.*.id, count.index)
   depends_on    = [aws_internet_gateway.gateway]
+  tags = {
+    Name = "${var.prefix} - Nat Gateway - ${count.index + 1}"
+  }
 }
 
 resource "aws_route_table" "route_table_private" {

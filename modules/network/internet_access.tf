@@ -28,4 +28,7 @@ resource "aws_route_table_association" "route_table_public_association" {
 resource "aws_eip" "nat" {
   count = length(aws_subnet.public_subnets)
   vpc   = true
+  tags = {
+    Name = "${var.prefix} - Internet Access EIP - ${count.index + 1}"
+  }
 }
