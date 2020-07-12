@@ -3,5 +3,5 @@ variable "aws_profile" {
 }
 
 variable "app_env" {
-  default = "dev"
+    default = "dev"
 }
