@@ -6,3 +6,13 @@ terraform {
     region = "us-east-1"
   }
 }
+
+data "terraform_remote_state" "cloud" {
+  backend = "s3"
+  config = {
+    bucket  = "terraform-states.nearsoft"
+    profile = var.aws_profile
+    region  = "us-east-1"
+    key     = "Task/${var.app_env}/cloud"
+  }
+}

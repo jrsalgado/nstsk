@@ -1,7 +1,3 @@
-variable "aws_profile" {
-  description = "AWS Profile"
-}
-
 # Network
 variable "vpc_cidr" {
   description = "CIDR for the VPC"

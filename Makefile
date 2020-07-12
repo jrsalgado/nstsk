@@ -1,5 +1,5 @@
 # DEFAUL VALUES
-bucket_name=nstask
+bucket_name=terraform-states.nearsoft
 # Choose in case you have multiple profiles on your workstation
 aws_profile ?= nstask
 # Switch to different TF image version
