@@ -16,8 +16,8 @@ module "network" {
 module "eks" {
   source = "../../modules/eks"
 
-  prefix               = var.app_env
-  subnets              = module.network.public_subnets
+  prefix  = var.app_env
+  subnets = module.network.public_subnets
 }
 
 module "chat-k8s" {
