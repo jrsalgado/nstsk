@@ -12,6 +12,6 @@ resource "kubernetes_service" "nginx_example" {
       target_port = 80
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }

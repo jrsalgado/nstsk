@@ -1,19 +1,26 @@
-provider "kubernetes" {
-  config_context_auth_info = "ops"
-  config_context_cluster   = "mycluster"
+provider "aws" {
+  version = "~> 2.0"
+  region  = "us-east-1"
+  profile = var.aws_profile
 }
 
-# Chat
-# Frontend
-# Backend
-# Redis
-# Mysql
+data "aws_eks_cluster_auth" "auth" {
+  name = data.terraform_remote_state.k8s.outputs.eks_cluster.name
+}
+
+provider "kubernetes" {
+  token                  = data.aws_eks_cluster_auth.auth.token
+  host                   = data.terraform_remote_state.k8s.outputs.eks_cluster.endpoint
+  cluster_ca_certificate = "${base64decode(data.terraform_remote_state.k8s.outputs.eks_cluster.certificate_authority.0.data)}"
+  load_config_file       = false
+}
+
+locals {
+  prefix = replace(var.app_env, "/[[:punct:]]/", "-")
+}
+
 module "chat" {
   source = "../../modules/chat-k8s"
-  
+  prefix = local.prefix
 }
-# App2
-# Data processing
-# module "app2" {
-#   source = ""
-# }
+
