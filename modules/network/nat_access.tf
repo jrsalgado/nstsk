@@ -4,7 +4,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = element(aws_subnet.public_subnets.*.id, count.index)
   depends_on    = [aws_internet_gateway.gateway]
   tags = {
-    Name = "${var.prefix} - Nat Gateway - ${count.index + 1}"
+    Name = "${var.prefix} - ${count.index + 1}"
   }
 }
 
