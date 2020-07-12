@@ -23,6 +23,6 @@ module "eks" {
 module "chat-k8s" {
   source = "../../modules/chat-k8s"
 
-  prefix                   = var.app_env
+  prefix          = var.app_env
   aws_eks_cluster = module.eks.aws_eks_cluster
 }
