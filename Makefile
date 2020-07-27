@@ -10,13 +10,13 @@ platform ?= cloud
 app_env ?= dev
 
 # Terraform container
-TERRAFORM := docker run -i -t \
+TERRAFORM := docker run -i --rm -t \
 		-v `pwd`:/terraform/ \
 		-v ~/.aws:/root/.aws \
 		-w /terraform/platform/$(platform) hashicorp/terraform:$(tf_versions)
 
 # Terraform with bash entrypoint
-TERRAFORMBASH := docker run -i -t \
+TERRAFORMBASH := docker run -i --rm -t \
 		-v `pwd`:/terraform/ \
 		-v ~/.aws:/root/.aws \
 		--entrypoint=/bin/sh \
