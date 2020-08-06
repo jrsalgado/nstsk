@@ -1,0 +1,11 @@
+server:
+  ingress:
+    annotations: {
+      "kubernetes.io/ingress.class": "alb",
+      "alb.ingress.kubernetes.io/target-type": "ip",
+      "alb.ingress.kubernetes.io/subnets": "subnet-0c7f3ea0e97a42732,subnet-0225580a81a99ee0f",
+      "alb.ingress.kubernetes.io/tags": "Environment=dev,Team=test"
+    }
+    enabled: true
+    hosts:
+      - something.example.com

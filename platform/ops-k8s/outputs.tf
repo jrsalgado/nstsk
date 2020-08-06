@@ -6,3 +6,5 @@ output "k8s_dashboard_access_token" {
   value       = "kubectl -n ${local.kubernetes_dashboard_ns} describe secret $(kubectl -n ${local.kubernetes_dashboard_ns} get secret | grep admin-user | awk '{print $1}')"
   description = "get access token command"
 }
+# http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:https/proxy/#/login
+# http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/prometheus-server:http/proxy/

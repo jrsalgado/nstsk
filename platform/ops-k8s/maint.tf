@@ -33,5 +33,6 @@ module "dashboard_k8s" {
   source = "../../modules/dashboard-k8s"
   namespace = local.kubernetes_dashboard_ns
   prefix = local.prefix
+  oidc_provider = data.terraform_remote_state.k8s.outputs.eks_cluster.identity[0].oidc[0].issuer
 }
 
