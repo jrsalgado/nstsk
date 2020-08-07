@@ -7,3 +7,13 @@ terraform {
     dynamodb_table = "terraform_states"
   }
 }
+
+data "terraform_remote_state" "k8s" {
+  backend = "s3"
+  config = {
+    bucket  = "terraform-states.nearsoft"
+    profile = var.aws_profile
+    region  = "us-east-1"
+    key     = "Task/${var.app_env}/k8s"
+  }
+}

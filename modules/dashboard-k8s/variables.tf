@@ -5,3 +5,5 @@ variable "prefix" {
 variable "namespace" {
   description = "K8s dashboard namespace"
 }
+
+variable "oidc_provider" { }

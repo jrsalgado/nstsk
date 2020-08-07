@@ -14,7 +14,19 @@ resource "aws_eks_cluster" "cluster_1" {
     aws_iam_role_policy_attachment.AmazonEKSServicePolicy,
   ]
 }
+data "aws_region" "current" {}
+# Fetch OIDC provider thumbprint for root CA
+# data "external" "thumbprint" {
+#   program = ["oidc-thumbprint.sh", data.aws_region.current.name]
+#   working_dir = "${path.module}/files"
+# }
 
+# https://medium.com/@marcincuber/amazon-eks-with-oidc-provider-iam-roles-for-kubernetes-services-accounts-59015d15cb0c
+resource "aws_iam_openid_connect_provider" "cluster" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
+  url             = aws_eks_cluster.cluster_1.identity.0.oidc.0.issuer
+}
 
 resource "aws_eks_node_group" "eks_nodes" {
   cluster_name    = aws_eks_cluster.cluster_1.name
