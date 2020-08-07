@@ -1,5 +1,6 @@
+
 resource "aws_iam_policy" "alb" {
-  name        = "alb_ingress_controller_policy"
+  name        = "${var.prefix}_alb_ingress_controller_policy"
   path        = "/"
   description = "ALB ingress controller policy"
 
@@ -147,8 +148,10 @@ resource "aws_iam_policy" "alb" {
 EOF
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "alb" {
-  name = "alb_ingress_controller_role"
+  name = "${var.prefix}_alb_ingress_controller_role"
 
   assume_role_policy = <<EOF
 {
@@ -162,7 +165,7 @@ resource "aws_iam_role" "alb" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "oidc.eks.us-east-1.amazonaws.com/id/B9C1FDFF21CF68957E72BAF28E54E005:sub": "system:serviceaccount:${kubernetes_namespace.k8s_dashboard.metadata.0.name}:alb-ingress-controller-aws-alb-ingress-controller"
+          "oidc.eks.us-east-1.amazonaws.com/id/B9C1FDFF21CF68957E72BAF28E54E005:sub": "system:serviceaccount:kube-system:alb-ingress-controller-aws-alb-ingress-controller"
         }
       }
     }
@@ -188,13 +191,13 @@ resource "helm_release" "alb_ic" {
   name       = "alb-ingress-controller"
   repository = "http://storage.googleapis.com/kubernetes-charts-incubator"
   chart      = "aws-alb-ingress-controller"
-  namespace  = kubernetes_namespace.k8s_dashboard.metadata.0.name
+  namespace  = var.namespace
   values = [
     data.template_file.alb_config.rendered
   ]
   set {
     name  = "clusterName"
-    value = "natanael-cano-cluster" # replace with variable
+    value = var.cluster_name
   }
   set {
     name  = "awsRegion"

@@ -36,3 +36,17 @@ module "dashboard_k8s" {
   oidc_provider = data.terraform_remote_state.k8s.outputs.eks_cluster.identity[0].oidc[0].issuer
 }
 
+module "prometheus_k8s" {
+  source = "../../modules/prometheus-k8s"
+  namespace = "kube-system"
+  prefix = local.prefix
+}
+
+module "alb_ingress_k8s" {
+  source = "../../modules/alb-ingress-k8s"
+  namespace = "kube-system"
+  prefix = local.prefix
+  cluster_name = data.terraform_remote_state.k8s.outputs.eks_cluster.name
+  cluster_arn = data.terraform_remote_state.k8s.outputs.eks_cluster.arn
+  cluster_url = data.terraform_remote_state.k8s.outputs.eks_cluster.endpoint
+}
