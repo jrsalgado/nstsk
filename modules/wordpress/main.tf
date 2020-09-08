@@ -10,35 +10,35 @@ data "template_cloudinit_config" "user_data" {
 }
 
 resource "aws_autoscaling_group" "wordpress_test" {
-  name                      = "${var.environment}-asg"
-  desired_capacity          = "${var.size}"
-  min_size                  = "${var.size}"
-  max_size                  = "${var.size}"
+  name                      = "${var.app_env}-asg"
+  desired_capacity          = var.size
+  min_size                  = var.size
+  max_size                  = var.size
   health_check_grace_period = "60"
   health_check_type         = "EC2"
   force_delete              = false
-  launch_configuration      = "${aws_launch_configuration.wordpress_test.name}"
+  launch_configuration      = aws_launch_configuration.wordpress_test.name
   vpc_zone_identifier       = ["${var.vpc_subnets}"]
 
   tag {
     key                 = "Name"
-    value               = "${var.environment}-asg"
+    value               = "${var.app_env}-asg"
     propagate_at_launch = true
   }
 
   tag {
     key                 = "Environment"
-    value               = "${var.environment}"
+    value               = var.app_env
     propagate_at_launch = true
   }
 }
 
 resource "aws_launch_configuration" "wordpress_test" {
-  name_prefix                 = "${var.environment}-lc"
-  image_id                    = "${var.ami}"
-  instance_type               = "${var.instance_type}"
-  key_name                    = "${var.key_name}"
-  user_data                   = "${data.template_cloudinit_config.user_data.rendered}"
+  name_prefix                 = "${var.app_env}-lc"
+  image_id                    = var.ami
+  instance_type               = var.instance_type
+  key_name                    = var.key_name
+  user_data                   = data.template_cloudinit_config.user_data.rendered
   associate_public_ip_address = false
   ebs_optimized               = false
 
@@ -52,8 +52,8 @@ resource "aws_launch_configuration" "wordpress_test" {
 }
 
 resource "aws_security_group" "wordpress_test" {
-  name        = "${var.environment}-allow-ssh-sg"
-  vpc_id      = "${var.vpc_id}"
+  name        = "${var.app_env}-allow-ssh-sg"
+  vpc_id      = var.vpc_id
   description = "SSH inbound only and egress"
 
   ingress {
@@ -64,8 +64,8 @@ resource "aws_security_group" "wordpress_test" {
   }
 
   tags {
-    Name        = "${var.environment}-allow-ssh-sg"
-    Environment = "${var.environment}"
+    Name        = "${var.app_env}-allow-ssh-sg"
+    Environment = var.app_env
     Terraform   = "true"
   }
 }

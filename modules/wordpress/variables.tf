@@ -20,7 +20,7 @@ variable "vpc_id" {
 }
 
 variable "vpc_elb_subnets" {
-  type        = "list"
+  type        = list
   description = "A list of subnet IDs to attach to the ELB"
 }
 
@@ -30,7 +30,7 @@ variable "size" {
 }
 
 variable "vpc_subnets" {
-  type        = "list"
+  type        = list
   description = "A list of subnet IDs to launch resources in"
 }
 
