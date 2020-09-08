@@ -1,6 +1,6 @@
 make apply aws_profile=nstask 
 
-make fmt aws_profile=nstask platform=stateful-application
+make aws_profile=nstask platform=stateful-application  fmt
 
 
 docker run -i -t \
