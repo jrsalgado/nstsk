@@ -1,5 +1,10 @@
 make apply aws_profile=nstask 
 
+make init aws_profile=nstask app_env=amonroy platform=stateful-application
+
+
+
+
 make aws_profile=nstask platform=stateful-application  fmt
 
 

@@ -54,3 +54,6 @@ apply:
 .PHONY: destroy
 destroy:
 	$(TERRAFORM) destroy -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
+
+ansible-build:
+	docker build -t ansible-image:2.9.13 ./platform/stateful-application

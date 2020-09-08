@@ -11,9 +11,8 @@ variable "ami" {
   description = "Provide the AMI to create autoscaling group"
 }
 
-variable "environment" {
+variable "app_env" {
   description = "For multiple environment"
-  default     = "dev-wordpress-elb"
 }
 
 variable "vpc_id" {
