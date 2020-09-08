@@ -1,0 +1,16 @@
+server:
+  ingress:
+    annotations: {
+      "kubernetes.io/ingress.class": "alb",
+      "alb.ingress.kubernetes.io/scheme": "internet-facing",
+      "alb.ingress.kubernetes.io/healthcheck-port": "http",
+      "alb.ingress.kubernetes.io/subnets": "subnet-0f458f10d34f27722,subnet-0ec66c9e51eb74ff1",
+      "alb.ingress.kubernetes.io/success-codes": "200-399",
+      "alb.ingress.kubernetes.io/tags": "Environment=dev,Team=test"
+    }
+    enabled: true
+    hosts:
+      - something.example.com 
+      # On the task change to *.elb.amazonaws.com
+  service:
+    type: NodePort

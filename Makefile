@@ -1,5 +1,5 @@
 # DEFAUL VALUES
-bucket_name=nstask
+bucket_name=terraform-states.nearsoft
 # Choose in case you have multiple profiles on your workstation
 aws_profile ?= nstask
 # Switch to different TF image version
@@ -10,13 +10,13 @@ platform ?= cloud
 app_env ?= dev
 
 # Terraform container
-TERRAFORM := docker run -i -t \
+TERRAFORM := docker run -i --rm -t \
 		-v `pwd`:/terraform/ \
 		-v ~/.aws:/root/.aws \
 		-w /terraform/platform/$(platform) hashicorp/terraform:$(tf_versions)
 
 # Terraform with bash entrypoint
-TERRAFORMBASH := docker run -i -t \
+TERRAFORMBASH := docker run -i --rm -t \
 		-v `pwd`:/terraform/ \
 		-v ~/.aws:/root/.aws \
 		--entrypoint=/bin/sh \
@@ -36,16 +36,21 @@ bash:
 .PHONY: init
 init:
 	$(TERRAFORM) init \
-	  -backend-config="key=Task/${app_env}" \
+	  -backend-config="key=Task/${app_env}/${platform}" \
 		-backend-config="bucket=$(bucket_name)" \
-		-backend-config="profile=$(aws_profile)"
+		-backend-config="profile=$(aws_profile)" 
 
 # Terraform plan
 .PHONY: plan
 plan:
-	$(TERRAFORM) plan -var 'aws_profile=$(aws_profile)' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) plan -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Terraform apply
 .PHONY: apply
 apply:
-	$(TERRAFORM) apply -var 'aws_profile=$(aws_profile)' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) apply -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
+
+# Terraform destroy
+.PHONY: destroy
+destroy:
+	$(TERRAFORM) destroy -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars

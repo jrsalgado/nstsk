@@ -1,0 +1,9 @@
+rbac:
+  serviceAccount:
+    create: true
+    annotations: {
+      "eks.amazonaws.com/role-arn": "${ALB_ROLE_ARN}"
+    }
+extraEnv: {
+  AWS_REGION: "us-east-1"
+}
