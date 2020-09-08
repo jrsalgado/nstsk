@@ -5,6 +5,7 @@ variable "instance_type" {
 
 variable "key_name" {
   description = "Key name to access using ssh"
+  default = "ns_test"
 }
 
 variable "ami" {
@@ -19,17 +20,13 @@ variable "vpc_id" {
   description = "The VPC ID"
 }
 
-variable "vpc_elb_subnets" {
-  type        = list
-  description = "A list of subnet IDs to attach to the ELB"
-}
 
 variable "size" {
   description = "Size of the autoscaling group"
   default     = "1"
 }
 
-variable "vpc_subnets" {
+variable "private_subnets" {
   type        = list
   description = "A list of subnet IDs to launch resources in"
 }
