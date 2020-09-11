@@ -18,7 +18,7 @@ resource "aws_autoscaling_group" "wordpress_test" {
   health_check_type         = "EC2"
   force_delete              = false
   launch_configuration      = aws_launch_configuration.wordpress_test.name
-  vpc_zone_identifier       = ["${var.private_subnets}"]
+  vpc_zone_identifier       = var.private_subnets
 
   tag {
     key                 = "Name"
@@ -63,7 +63,7 @@ resource "aws_security_group" "wordpress_test" {
     cidr_blocks = ["${var.allow_ssh_cidr_block}"]
   }
 
-  tags {
+  tags = {
     Name        = "${var.app_env}-allow-ssh-sg"
     Environment = var.app_env
     Terraform   = "true"
