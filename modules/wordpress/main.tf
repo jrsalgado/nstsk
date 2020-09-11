@@ -10,7 +10,7 @@ data "template_cloudinit_config" "user_data" {
 }
 
 resource "aws_autoscaling_group" "wordpress_test" {
-  name                      = "${var.app_env}-asg"
+  name                      = "${var.app_env}-wordpress-asg"
   desired_capacity          = var.size
   min_size                  = var.size
   max_size                  = var.size
@@ -22,7 +22,7 @@ resource "aws_autoscaling_group" "wordpress_test" {
 
   tag {
     key                 = "Name"
-    value               = "${var.app_env}-asg"
+    value               = "${var.app_env}-wordpress-asg"
     propagate_at_launch = true
   }
 
@@ -31,10 +31,16 @@ resource "aws_autoscaling_group" "wordpress_test" {
     value               = var.app_env
     propagate_at_launch = true
   }
+  
+  tag {
+    key                 = "Application"
+    value               = "wordpress"
+    propagate_at_launch = true
+  }
 }
 
 resource "aws_launch_configuration" "wordpress_test" {
-  name_prefix                 = "${var.app_env}-lc"
+  name_prefix                 = "${var.app_env}-wordpress-lc"
   image_id                    = var.ami
   instance_type               = var.instance_type
   key_name                    = var.key_name
@@ -52,7 +58,7 @@ resource "aws_launch_configuration" "wordpress_test" {
 }
 
 resource "aws_security_group" "wordpress_test" {
-  name        = "${var.app_env}-allow-ssh-sg"
+  name        = "${var.app_env}-wordpress-allow-ssh-sg"
   vpc_id      = var.vpc_id
   description = "SSH inbound only and egress"
 
@@ -64,7 +70,7 @@ resource "aws_security_group" "wordpress_test" {
   }
 
   tags = {
-    Name        = "${var.app_env}-allow-ssh-sg"
+    Name        = "${var.app_env}-wordpress-allow-ssh-sg"
     Environment = var.app_env
     Terraform   = "true"
   }
