@@ -18,7 +18,7 @@ resource "aws_autoscaling_group" "wordpress_test" {
   health_check_type         = "EC2"
   force_delete              = false
   launch_configuration      = aws_launch_configuration.wordpress_test.name
-  vpc_zone_identifier       = var.private_subnets
+  vpc_zone_identifier       = var.public_subnets
 
   tag {
     key                 = "Name"
@@ -39,7 +39,7 @@ resource "aws_launch_configuration" "wordpress_test" {
   instance_type               = var.instance_type
   key_name                    = var.key_name
   user_data                   = data.template_cloudinit_config.user_data.rendered
-  associate_public_ip_address = false
+  associate_public_ip_address = true
   ebs_optimized               = false
 
   security_groups = [

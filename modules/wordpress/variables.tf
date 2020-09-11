@@ -26,7 +26,7 @@ variable "size" {
   default     = "1"
 }
 
-variable "private_subnets" {
+variable "public_subnets" {
   type        = list
   description = "A list of subnet IDs to launch resources in"
 }

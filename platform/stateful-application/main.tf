@@ -15,9 +15,10 @@ module "ami" {
 
 module "wordpress" {
   source               = "../../modules/wordpress"
-  ami                  = module.ami.ami_ubuntu_18_04
   app_env              = var.app_env
+  key_name             = var.key_name
+  ami                  = module.ami.ami_ubuntu_18_04
   allow_ssh_cidr_block = "${chomp(data.http.my_ip.body)}/32"
-  private_subnets      = data.terraform_remote_state.cloud.outputs.private_subnets.*.id
-  vpc_id = data.terraform_remote_state.cloud.outputs.vpc_main.id
+  vpc_id               = data.terraform_remote_state.cloud.outputs.vpc_main.id
+  public_subnets       = data.terraform_remote_state.cloud.outputs.public_subnets.*.id
 }
