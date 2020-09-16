@@ -1,0 +1,9 @@
+☐ kubectl apply -f https://raw.githubusercontent.com/ageapps/docker-chat/master/k8s/global-config.yaml
+☐ kubectl apply -f modules/chat-k8s/files/mongodb-deployment.yaml
+☐ kubectl apply -f modules/chat-k8s/files/rabbit-deployment.yaml
+☐ kubectl apply -f modules/chat-k8s/files/docker-chat.yaml
+
+☐ party hard!!! http://127.0.0.1:8001/api/v1/namespaces/default/services/docker-chat:http/proxy/
+
+☐ create ALB ingress to chat-app
+☐ Create a chart
