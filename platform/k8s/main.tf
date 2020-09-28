@@ -3,6 +3,7 @@ provider "aws" {
   region  = "us-east-1"
   profile = var.aws_profile
 }
+
 locals {
   prefix = replace(var.app_env, "/[[:punct:]]/", "-")
 }
