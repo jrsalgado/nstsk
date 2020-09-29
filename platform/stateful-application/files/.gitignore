@@ -1,0 +1,2 @@
+# Prevents unitentional upload of locally generated keys
+id_rsa*

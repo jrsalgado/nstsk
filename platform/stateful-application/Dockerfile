@@ -1,12 +1,29 @@
-FROM ubuntu:bionic
+# Installs AWS CLI, Ansible, Terraform and various troubleshooting tools
 
+FROM ubuntu:20.04
 
-
-RUN apt update
-RUN apt install software-properties-common -y
-RUN apt-add-repository --yes --update ppa:ansible/ansible
-RUN apt install ansible -y
-
-RUN apt install curl -y
-
+RUN apt-get update -y && \
+    apt-get install --no-install-recommends --yes \
+      apt-utils \
+      python3.8 \
+      python3-pip \
+      unzip \
+      vim \
+      jq \
+      iputils-ping \
+      dnsutils \
+      openssh-client \
+      net-tools \
+      curl && \
+    pip3 install --upgrade \
+      awscli \
+      ansible \
+      pymysql \
+      boto3 \
+      botocore \
+      ansible-lint && \
+    curl -sO https://releases.hashicorp.com/terraform/0.12.21/terraform_0.12.21_linux_amd64.zip && \
+    unzip terraform_0.12.21_linux_amd64.zip -d  /usr/local/bin/ && \
+    rm terraform_0.12.21_linux_amd64.zip
+ 
 WORKDIR /

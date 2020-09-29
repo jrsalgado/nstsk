@@ -4,19 +4,21 @@ provider "aws" {
   profile = var.aws_profile
 }
 
-
-data "http" "my_ip" {
-  url = "http://ipv4.icanhazip.com"
-}
-
 module "ami" {
   source = "../../modules/ami"
+  ami_name = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
 }
 
 module "wordpress" {
   source               = "../../modules/wordpress"
-  ami                  = module.ami_ubuntu_18_04
+  ami                  = module.ami.ami_id
   app_env              = var.app_env
-  allow_ssh_cidr_block = "${chomp(data.http.my_ip.body)}/32"
+  vpc_id               = data.terraform_remote_state.cloud.outputs.vpc_main.id
   private_subnets      = data.terraform_remote_state.cloud.outputs.private_subnets.*.id
+  public_subnets       = data.terraform_remote_state.cloud.outputs.public_subnets.*.id
+  allow_ssh_cidr_block = "0.0.0.0/0"
+}
+
+output "subnets" {
+  value = data.terraform_remote_state.cloud.outputs.public_subnets.*.id
 }

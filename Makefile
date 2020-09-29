@@ -1,9 +1,9 @@
 # DEFAUL VALUES
-bucket_name=terraform-states.nearsoft
+bucket_name=alfredo-terraform-states.nearsoft
 # Choose in case you have multiple profiles on your workstation
 aws_profile ?= nstask
 # Switch to different TF image version
-tf_versions ?= 0.12.21
+tf_versions ?= 0.12.29
 # Select platform
 platform ?= cloud
 # Select application environment (dev, stage, prod)
@@ -15,7 +15,7 @@ TERRAFORM := docker run -i --rm -t \
 		-v ~/.aws:/root/.aws \
 		-w /terraform/platform/$(platform) hashicorp/terraform:$(tf_versions)
 
-# Terraform with bash entrypoint
+# Terraform with sh entrypoint
 TERRAFORMBASH := docker run -i --rm -t \
 		-v `pwd`:/terraform/ \
 		-v ~/.aws:/root/.aws \
@@ -27,7 +27,7 @@ TERRAFORMBASH := docker run -i --rm -t \
 fmt:
 	$(TERRAFORM) fmt --recursive
 
-# Terraform Bash
+# Terraform sh
 .PHONY: bash
 bash:
 	$(TERRAFORMBASH)
@@ -36,7 +36,7 @@ bash:
 .PHONY: init
 init:
 	$(TERRAFORM) init \
-	  -backend-config="key=Task/${app_env}/${platform}" \
+		-backend-config="key=Task/${app_env}/${platform}" \
 		-backend-config="bucket=$(bucket_name)" \
 		-backend-config="profile=$(aws_profile)" 
 

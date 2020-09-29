@@ -1,25 +1,19 @@
 variable "instance_type" {
-  description = "Provide instance type by default t2.micro"
+  description = "Provides instance type by default t2.micro"
   default     = "t2.micro"
 }
 
-variable "key_name" {
-  description = "Key name to access using ssh"
-  default = "ns_test"
-}
-
 variable "ami" {
-  description = "Provide the AMI to create autoscaling group"
+  description = "Provides the AMI to create autoscaling group"
 }
 
 variable "app_env" {
-  description = "For multiple environment"
+  description = "Application environment name"
 }
 
 variable "vpc_id" {
   description = "The VPC ID"
 }
-
 
 variable "size" {
   description = "Size of the autoscaling group"
@@ -27,6 +21,11 @@ variable "size" {
 }
 
 variable "private_subnets" {
+  type        = list
+  description = "A list of subnet IDs to launch resources in"
+}
+
+variable "public_subnets" {
   type        = list
   description = "A list of subnet IDs to launch resources in"
 }
