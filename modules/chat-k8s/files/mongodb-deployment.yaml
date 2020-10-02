@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+        tier: database
+    spec:
+      containers:
+        - name: "mongo-database"
+          image: "ageapps/docker-chat:mongo"
+          imagePullPolicy: Always
+          env:
+          - name: MONGO_DB_APP_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: global-config
+                key: db.password
+          - name: MONGO_DB_APP_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: global-config
+                key: db.username
+          - name: MONGO_DB_APP_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: global-config
+                key: db.database
+          ######   DEVELOPMENT VARIABLE #######
+          - name: REDEPLOY_VAR
+            value: "v2"
+          ports:
+            - containerPort: 27017
