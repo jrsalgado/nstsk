@@ -55,8 +55,6 @@ init:
 # Terraform plan
 .PHONY: plan
 plan:
-	export ENVIRONMENT="${app_env}"
-	export AWS_PROFILE="${aws_profile}"
 	$(TERRAFORM) plan -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Terraform apply
