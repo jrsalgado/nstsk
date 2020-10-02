@@ -11,6 +11,10 @@ variable "app_env" {
   description = "Application environment name"
 }
 
+variable "aws_profile" {
+  description = "AWS profile name"
+}
+
 variable "vpc_id" {
   description = "The VPC ID"
 }

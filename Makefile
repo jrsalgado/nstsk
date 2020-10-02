@@ -1,5 +1,5 @@
 # DEFAUL VALUES
-bucket_name=alfredo-terraform-states.nearsoft
+bucket_name=terraform-states.nearsoft
 # Choose in case you have multiple profiles on your workstation
 aws_profile ?= nstask
 # Switch to different TF image version
@@ -22,6 +22,18 @@ TERRAFORMBASH := docker run -i --rm -t \
 		--entrypoint=/bin/sh \
 		-w /terraform/terraform hashicorp/terraform:$(tf_versions)
 
+# Ansible container
+ANSIBLE := docker run --interactive --rm --tty  \
+                --volume "${PWD}/platform/stateful-application/ansible:/ansible" \
+                --volume ~/.aws:/root/.aws \
+                --volume "${PWD}/platform/stateful-application/files/id_rsa_evaluator:/tmp/id_rsa_evaluator:ro" \
+                --env ENVIRONMENT="${ENVIRONMENT}" \
+                --env AWS_PROFILE="${AWS_PROFILE}" \
+                --entrypoint /usr/local/bin/ansible-playbook \
+                --workdir /ansible \
+                terraform-ansible:local \
+                site.yml
+
 # Format files
 .PHONY: fmt
 fmt:
@@ -43,6 +55,8 @@ init:
 # Terraform plan
 .PHONY: plan
 plan:
+	export ENVIRONMENT="${app_env}"
+	export AWS_PROFILE="${aws_profile}"
 	$(TERRAFORM) plan -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Terraform apply
@@ -55,5 +69,14 @@ apply:
 destroy:
 	$(TERRAFORM) destroy -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
+# Build Terraform Ansible Docker image
+.PHONY: ansible-build
 ansible-build:
-	docker build -t ansible-image:2.9.13 ./platform/stateful-application
+	docker build -t terraform-ansible:local ./platform/stateful-application
+
+# Provision Wordpress and the MySQL server using ansible
+.PHONY: provision-wordpress
+provision-wordpress:
+	export ENVIRONMENT="${app_env}"
+	export AWS_PROFILE="${aws_profile}"
+	$(ANSIBLE)

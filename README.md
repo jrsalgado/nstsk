@@ -8,9 +8,7 @@
     - [General information](#general-information)
       - [Wordpress](#wordpress)
       - [MySQL](#mysql)
-      - [MySQL Encora](#mysql-encora)
     - [Deployment](#deployment)
-    - [Various](#various)
 
 ## Platform Levels
 
@@ -22,13 +20,13 @@
 
 ## Platform dependency
 
-1- cluod
+1- cloud
 2- k8s
 3- [ services-k8s, ops-k8s, stateful-application ]
 
 ## Platform creation steps
 
-Once you have your aws credentials on ~/.aws/credentials like this:
+Once you have your AWS credentials on ~/.aws/credentials like this:
 
 ```bash
 [nstask]
@@ -39,7 +37,7 @@ aws_secret_access_key=12y3tamarindoonetwotreetamarindo
 Create the platforms one by one
 Where:
 
-- aws_profile = refers to your aws profile credentials as you have them set on your workstation
+- aws_profile = refers to your AWS profile credentials as you have them set on your workstation
 - app_env = refers to an environment or the interviewed name
 - platform = the platform level you are going to create for the task
 
@@ -47,10 +45,10 @@ Where:
 # Start with the cloud platform level [ mostly network, setup other platforms are going to use this resources]
 $ make apply aws_profile=nstask app_env=natanael-cano platform=cloud
 
-# Once cloud is created, you can continue with the K8s cluster platform [ This platform is the base for k8s app microservices and ops services running on containers]
+# Once the cloud platform is created, you can continue with the K8s cluster platform [ This platform is the base for k8s app microservices and ops services running on containers]
 $ make apply aws_profile=nstask app_env=natanael-cano platform=k8s
 
-# Once you hav a K8s cluster you can create your K8s resources and deploy the app microservices and operational tools
+# Once you have a K8s cluster you can create your K8s resources and deploy the app microservices and operational tools
 $ make apply aws_profile=nstask app_env=natanael-cano platform=services-k8s
 $ make apply aws_profile=nstask app_env=natanael-cano platform=ops-k8s
 ```
@@ -63,23 +61,16 @@ The application deploys three EC2 instances:
 
 #### Wordpress
 
-- Description: Apache 2/ PHP 7 service configured with Wordpress 5.5.1. Deployed behind an Application Load Balancer.
+- Description: Apache 2/ PHP 7 service configured with Wordpress 5.5.1. Deployed in an auto-scaling group.
 - Subnet: public.
 - Name tag value: `wordpress-<ENVIRONMENT>`
 - OS version: Ubuntu 20.04
 
 #### MySQL
 
-- Description: MySQL server installed.
+- Description: MySQL server.
 - Subnet: private.
 - Name tag value: `mysql-<ENVIRONMENT>`
-- OS version: Ubuntu 20.04
-
-#### MySQL Encora
-
-- Description: MySQL server with the Wordpress database restored.
-- Subnet: private.
-- Name tag value: `mysql-encora-<ENVIRONMENT>`
 - OS version: Ubuntu 20.04
 
 ### Deployment
@@ -133,7 +124,7 @@ s3://<S3_BUCKET_NAME>/Task/<APPLICATION_ENVIRONMENT_NAME>/stateful-application
 5. Specify the bucket name in the `bucket_name` variable in `Makefile` file
 
 
-4. Create the ansible configuration directory:
+4. Create the Ansible configuration directory:
 
 ```bash
 $ cd ansible
@@ -141,7 +132,7 @@ $ cp -R inventory/template inventory/<APPLICATION_ENVIRONMENT_NAME>
 # edit inventory/<APPLICATION_ENVIRONMENT_NAME>/ and replace
 ```
 
-5. Create terraform configuration file
+5. Create the Terraform configuration file
 
 ```
 platform/cloud/vars_<APPLICATION_ENVIRONMENT_NAME>.tfvars
@@ -162,27 +153,22 @@ $ make init aws_profile=<AWS_PROFILE_NAME> app_env=junior-h platform=stateful-ap
 $ make apply aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateful-application
 ```
 
-5. Checking the application was correctly deployed
+7. Build Ansible docker image
 
-After completing the previous steps Terraform will generate an output simmilar to this:
-
-```text
-REPLACE_WITH_REAL_OUTPUT
+```bash
+# build image
+$ make ansible-build
 ```
 
-Take the Application Load Balancer IP addrees and use it to create an entry on your `/etc/hosts` file, to simmulate a DNS record:
+9. Provision Wordpress and MySQL servers
 
-```text
-<APPLICATION_LOAD_BALANCER_IP>          wordpress.encora
+```bash
+# Run provisioning
+$ make provision-wordpress aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
 ```
 
-Open your browser in `http://wordpress.encora/` to confirm the app is working.
+**Note:** Wait at least 90 seconds after deploying the servers before running this step. Otherwise won't find them and will throw an error message.
 
-### Various
+8. Checking the application was correctly deployed
 
-Destroy
-
-```
-$ make destroy aws_profile=junior-h app_env=junior-h platform=stateful-application
-$ make destroy aws_profile=junior-h app_env=junior-h platform=cloud
-```
+Open your browser in `http://<WORDPRESS_SERVER_PUBLIC_IP_ADDRESS>/` to confirm the app is working.

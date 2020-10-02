@@ -17,8 +17,5 @@ module "wordpress" {
   private_subnets      = data.terraform_remote_state.cloud.outputs.private_subnets.*.id
   public_subnets       = data.terraform_remote_state.cloud.outputs.public_subnets.*.id
   allow_ssh_cidr_block = "0.0.0.0/0"
-}
-
-output "subnets" {
-  value = data.terraform_remote_state.cloud.outputs.public_subnets.*.id
+  aws_profile          = var.aws_profile
 }

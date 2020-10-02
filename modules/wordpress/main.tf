@@ -71,17 +71,16 @@ resource "aws_security_group" "wordpress" {
   }
 
   tags = {
-    Name        = "${var.app_env}-allow-incomming-traffic-sg"
+    Name        = "${var.app_env}-allow-incoming-traffic-sg"
     Environment = var.app_env
     Terraform   = "true"
   }
 }
 
-
 resource "aws_security_group" "mysql" {
   name        = "${var.app_env}-mysql-sg"
-  vpc_id      = var.vpc_id
   description = "Inboud traffic"
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 22
@@ -114,8 +113,11 @@ resource "aws_instance" "mysql" {
   instance_type = "t3.micro"
   key_name      = aws_key_pair.keypair.key_name
   vpc_security_group_ids = [ aws_security_group.mysql.id ]
+  subnet_id = var.public_subnets[0]
+  associate_public_ip_address = true
 
   tags = {
-    Name = "mysql-${var.app_env}",
+    Name = "${var.app_env}-mysql",
+    Environment = var.app_env
   }
 }

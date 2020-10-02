@@ -1,2 +1,2 @@
-# Prevents unitentional upload of locally generated keys
+# Prevents unitentional upload of SSH keys
 id_rsa*
