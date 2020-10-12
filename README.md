@@ -34,4 +34,3 @@ $ make apply aws_profile=nstask app_env=natanael-cano platform=services-k8s
 $ make apply aws_profile=nstask app_env=natanael-cano platform=ops-k8s
 
 ```
-
