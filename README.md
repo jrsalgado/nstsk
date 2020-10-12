@@ -151,10 +151,10 @@ $ make ansible-build
 
 ```bash
 # Run provisioning
-$ make provision-wordpress aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
+$ make provision-wordpress aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateful-application
 ```
 
-**Note:** Wait at least 90 seconds after deploying the servers before running this step. Otherwise won't find them and will throw an error message.
+**Note:** Wait at least 90 seconds after deploying the servers before running this step. Otherwise Ansible won't find them and will throw an error message.
 
 9. Checking the application was correctly deployed
 
