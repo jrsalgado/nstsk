@@ -1,4 +1,4 @@
-# DEFAUL VALUES
+ DEFAUL VALUES
 bucket_name=terraform-states.nearsoft
 # Choose in case you have multiple profiles on your workstation
 aws_profile ?= nstask
@@ -27,8 +27,8 @@ ANSIBLE := docker run --interactive --rm --tty  \
                 --volume "${PWD}/platform/stateful-application/ansible:/ansible" \
                 --volume ~/.aws:/root/.aws \
                 --volume "${PWD}/platform/stateful-application/files/id_rsa_evaluator:/tmp/id_rsa_evaluator:ro" \
-                --env ENVIRONMENT="${ENVIRONMENT}" \
-                --env AWS_PROFILE="${AWS_PROFILE}" \
+                --env ENVIRONMENT="${app_env}" \
+                --env AWS_PROFILE="${aws_profile}" \
                 --entrypoint /usr/local/bin/ansible-playbook \
                 --workdir /ansible \
                 terraform-ansible:local \
