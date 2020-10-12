@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 module "ami" {
-  source = "../../modules/ami"
+  source   = "../../modules/ami"
   ami_name = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
 }
 
@@ -19,3 +19,4 @@ module "wordpress" {
   allow_ssh_cidr_block = "0.0.0.0/0"
   aws_profile          = var.aws_profile
 }
+

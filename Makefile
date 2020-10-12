@@ -20,6 +20,8 @@ TERRAFORMBASH := docker run -i --rm -t \
 		-v `pwd`:/terraform/ \
 		-v ~/.aws:/root/.aws \
 		--entrypoint=/bin/sh \
+		--env ENVIRONMENT="${app_env}" \
+		--env AWS_PROFILE="${aws_profile}" \
 		-w /terraform/terraform hashicorp/terraform:$(tf_versions)
 
 # Ansible container

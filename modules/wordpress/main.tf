@@ -121,3 +121,14 @@ resource "aws_instance" "mysql" {
     Environment = var.app_env
   }
 }
+
+
+resource "aws_s3_bucket" "db-backups-task" {
+  bucket = "db-backups-task"
+  acl    = "private"
+
+  tags = {
+    Name        = "db-backups-task"
+    Environment = "Dev"
+  }
+}
