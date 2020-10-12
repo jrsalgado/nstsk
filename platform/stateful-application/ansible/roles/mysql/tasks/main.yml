@@ -1,0 +1,45 @@
+---
+- name: Install required packages
+  apt:
+    name:
+      - python3-pymysql
+    state: present
+    update_cache: yes
+
+- name: Install MySQL
+  apt:
+    name: mysql-server
+    state: present
+    update_cache: yes
+
+- name: Start and enable mysql service
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: Create MySQL database for Wordpress
+  mysql_db:
+    name: "{{ wp_database_name }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    state: present
+    encoding: utf8
+  no_log: true
+
+- name: Create database user
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{ wp_database_username }}"
+    password: "{{ wp_database_password }}"
+    host: '%'
+    state: present
+    priv: "{{ wp_database_name }}.*:ALL"
+  no_log: True
+
+- name: Set mysql configuration
+  template:
+    src: mysqld.cnf
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+    mode: 0744
+  notify:
+    - restart mysql

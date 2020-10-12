@@ -1,0 +1,15 @@
+mysql_root_password      : ""
+
+wp_database_name         : "wordpress"
+wp_database_host         : "{{ groups['mysql_servers'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | list | first }}"
+wp_database_username     : "wordpress"
+wp_database_password     : "wordpress"
+
+wp_salt_auth_key         : "TN5ZNQ2CYAX4MKkC4uRqCPN38b9DwKkmjEFnDXczGmV6R6ZMBMSY2Ty8uCc8WgBc"
+wp_salt_secure_auth_key  : "fjQV2XW56tDjgz5KDUhVj2T4QtwQLUsktLgEzdx8sfrHLDJj8FJhMqRYt2m93NES"
+wp_salt_logged_in_key    : "zaAzfjtcdG89v4wuY345xq6mdnHJ2Z5hZvbeU5j39Kw24KW67RrRkqBW2zFeEmrJ"
+wp_salt_nonce_key        : "WsxRaBSqPtq6rYbFpkrHnEGfh5UJNneadgPcVYXf4g269jQjsCFAmDzt9U3q9uUT"
+wp_salt_auth_salt        : "kmfSEeTVGsusJ3UpSB2B5H9yyr9rERc6wzfKfMUjJYwAAk7WbWXcdDjKbEqySbPr"
+wp_salt_secure_auth_salt : "H6J6dyxkJyG8BdwF6C3wegexQfj2PPZ6C7udJQgQhss6WA24aj8hWPHdNUVennd4"
+wp_salt_logged_in_salt   : "6Lk44QLcUaGLs96Yd9XjdgKMNCXnJj3qHz5kUV626cX7aU7DfnC6NehXJxBnRvHU"
+wp_salt_nonce_salt       : "w5MvNJALyUf9kED6LzLLWPbGLnQcWFyWjYm8wWZsrVW4LbKdfQ26KXSZGh9jJMXk"

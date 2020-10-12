@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+
+  ansible:
+    image: terraform-ansible:local
+    volumes:
+      - ./ansible:/ansible:rw
+      - ./files/id_rsa_evaluator:/tmp/id_rsa_evaluator:ro
+      - ~/.aws:/root/.aws:ro
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - AWS_PROFILE=${AWS_PROFILE}
+    container_name: "ansible"
+    tty: true
+    stdin_open: true
+    entrypoint: /bin/bash
+    working_dir: /ansible
