@@ -2,6 +2,8 @@
 bucket_name=terraform-states.nearsoft
 # Choose in case you have multiple profiles on your workstation
 aws_profile ?= nstask
+# Choose the AWS region to use
+aws_region ?=  us-east-1
 # Switch to different TF image version
 tf_versions ?= 0.12.29
 # Select platform
@@ -57,17 +59,17 @@ init:
 # Terraform plan
 .PHONY: plan
 plan:
-	$(TERRAFORM) plan -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) plan -var 'aws_profile=$(aws_profile)' -var 'aws_region=${aws_region}' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Terraform apply
 .PHONY: apply
 apply:
-	$(TERRAFORM) apply -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) apply -var 'aws_profile=$(aws_profile)' -var 'aws_region=${aws_region}' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Terraform destroy
 .PHONY: destroy
 destroy:
-	$(TERRAFORM) destroy -var 'aws_profile=$(aws_profile)' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) destroy -var 'aws_profile=$(aws_profile)' -var 'aws_region=${aws_region}' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Build Terraform Ansible Docker image
 .PHONY: ansible-build
@@ -79,4 +81,5 @@ ansible-build:
 provision-wordpress:
 	export ENVIRONMENT="${app_env}"
 	export AWS_PROFILE="${aws_profile}"
+	export AWS_REGION="${aws_region}"
 	$(ANSIBLE)

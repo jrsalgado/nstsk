@@ -3,6 +3,7 @@
 - [ENCORA DEVOPS MODULAR TASK](#encora-devops-modular-task)
   - [Platform Levels](#platform-levels)
   - [Platform dependency](#platform-dependency)
+  - [AWS deployment](#aws-deployment)
   - [Platform creation steps](#platform-creation-steps)
   - [The stateful application](#the-stateful-application)
     - [General information](#general-information)
@@ -24,9 +25,13 @@
 2- k8s
 3- [ services-k8s, ops-k8s, stateful-application ]
 
+## AWS deployment
+
+All the infrastructure deploys by default on `us-east-1`. If you want to deploy on a different region pass the  `aws_region` parameter to `make`.
+
 ## Platform creation steps
 
-Once you have your AWS credentials on ~/.aws/credentials like this:
+Create a named profile for the AWS Command Line Interface (CLI).  Once you have your AWS credentials on `~/.aws/credentials` like this:
 
 ```bash
 [nstask]
@@ -34,10 +39,10 @@ aws_access_key_id=LAGALLETADEANIMALITOTIENEMUCHAPROTEINA
 aws_secret_access_key=12y3tamarindoonetwotreetamarindo
 ```
 
-Create the platforms one by one
-Where:
+Create the platforms one by one, where:
 
-- aws_profile = refers to your AWS profile credentials as you have them set on your workstation
+- aws_profile = refers to your AWS profile credentials as you have them set on your workstation.
+- aws_region = name of the AWS region where the infrastructure will be deployed
 - app_env = refers to an environment or the interviewed name
 - platform = the platform level you are going to create for the task
 
@@ -82,8 +87,7 @@ Follow these steps to deploy the application:
 Run the following commands to create one key pair for the evaluator.
 
 ```bash
-$ cd platform/stateful-application
-$ ssh-keygen -t rsa -b 4096 -N "" -f files/id_rsa_evaluator
+$ ssh-keygen -t rsa -b 4096 -N "" -f platform/stateful-application/files/id_rsa_evaluator
 ```
 
 These commands create the key pairs under `files` directory:
@@ -100,7 +104,7 @@ Note: This key pair will be used by ansible to provision the Wordpress and MySQL
 
 2. Crear AWS CLI profile
 
-```
+```bash
 $ aws configure --profile <PROFILE_NAME>
 ```
 
@@ -108,7 +112,6 @@ $ aws configure --profile <PROFILE_NAME>
 
 - Table name: `terraform_states`
 - Tabke key: `LockID`
-
 
 4. Create a S3 bucket and the directories structure required to store Terraform statefile
 
