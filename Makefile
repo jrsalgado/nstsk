@@ -64,7 +64,7 @@ plan:
 # Terraform apply
 .PHONY: apply
 apply:
-	$(TERRAFORM) apply -var 'aws_profile=$(aws_profile)' -var 'aws_region=${aws_region}' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
+	$(TERRAFORM) apply  -var 'aws_profile=$(aws_profile)' -var 'aws_region=${aws_region}' -var 'app_env=${app_env}' -var-file=vars_${app_env}.tfvars
 
 # Terraform destroy
 .PHONY: destroy
@@ -79,7 +79,5 @@ ansible-build:
 # Provision Wordpress and the MySQL server using ansible
 .PHONY: provision-wordpress
 provision-wordpress:
-	export ENVIRONMENT="${app_env}"
-	export AWS_PROFILE="${aws_profile}"
-	export AWS_REGION="${aws_region}"
+	sed "s/AWS_REGION_TO_REPLACE/${aws_region}/g" "${PWD}/platform/stateful-application/ansible/inventory/${app_env}/.inventory_aws_ec2.yml" > "${PWD}/platform/stateful-application/ansible/inventory/${app_env}/inventory_aws_ec2.yml"
 	$(ANSIBLE)
