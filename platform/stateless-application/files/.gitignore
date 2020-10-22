@@ -1,0 +1,2 @@
+# Prevents unitentional upload of SSH keys
+id_rsa*
