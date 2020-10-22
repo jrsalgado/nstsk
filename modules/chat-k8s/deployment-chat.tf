@@ -8,7 +8,7 @@ resource "kubernetes_service" "docker_chat_app" {
       App = kubernetes_deployment.docker_chat_app.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      name:       = "http"
+      name        = "http"
       port        = 8080
       target_port = 3000
     }
