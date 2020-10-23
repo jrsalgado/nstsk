@@ -34,7 +34,7 @@ variable "instance_class" {
 }
 
 variable "private_subnets" {
-  type        = list
+  type        = list(string)
   description = "Private subnets"
 }
 

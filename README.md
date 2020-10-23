@@ -107,7 +107,7 @@ $ aws configure --profile <PROFILE_NAME>
 3. Create a DynamoDB table for `cloud` to allow locking the statefile while running Terraform:
 
 - Table name: `terraform_states`
-- Tabke key: `LockID`
+- Table key: `LockID`
 
 
 4. Create a S3 bucket and the directories structure required to store Terraform statefile

@@ -3,12 +3,12 @@ variable "app_env" {
 }
 
 variable "private_subnets" {
-  type        = list
+  type        = list(string)
   description = "Private subnets"
 }
 
 variable "public_subnets" {
-  type        = list
+  type        = list(string)
   description = "Public subnets"
 }
 
