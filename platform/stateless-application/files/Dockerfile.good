@@ -1,0 +1,14 @@
+FROM wordpress:php7.2
+
+ENV WORDPRESS_DB_HOST=db \
+        WORDPRESS_DB_USER=exampleuser \
+        WORDPRESS_DB_PASSWORD=examplepass \
+        WORDPRESS_DB_NAME=exampledb
+
+RUN apt update && apt install -y \
+        zip \
+        unzip
+
+RUN curl https://resources-tasks-ns.s3.amazonaws.com/themes.zip --output /tmp/themes.zip && \
+        unzip /tmp/themes.zip -d /usr/src/wordpress/wp-content/themes && \
+        rm -rf /tmp/themes.zip
