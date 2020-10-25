@@ -18,6 +18,15 @@ module "database" {
   sg_id_ingress   = module.ecs.ecs_instances_sg_id
 }
 
+
+#module "elasticache" {
+#  source            = "../../modules/elasticache"
+#  private_subnets   = data.terraform_remote_state.cloud.outputs.private_subnets.*.id
+#  app_env           = var.app_env
+#  vpc_id            = data.terraform_remote_state.cloud.outputs.vpc_main.id
+#  sg_id_ingress   = module.ecs.ecs_instances_sg_id
+#}
+
 module "ecs" {
   source            = "../../modules/ecs"
   vpc_id            = data.terraform_remote_state.cloud.outputs.vpc_main.id

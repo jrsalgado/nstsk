@@ -14,6 +14,10 @@ resource "aws_alb_target_group" "ecs_target_group" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
 
+  stickiness {
+    type = "lb_cookie"
+  }
+
   health_check {
     healthy_threshold   = "5"
     unhealthy_threshold = "2"
