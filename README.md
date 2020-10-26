@@ -106,7 +106,7 @@ Note: This key pair will be used by ansible to provision the Wordpress and MySQL
 
 2. Crear AWS CLI profile
 
-```
+```bash
 $ aws configure --profile <PROFILE_NAME>
 ```
 
@@ -114,7 +114,6 @@ $ aws configure --profile <PROFILE_NAME>
 
 - Table name: `terraform_states`
 - Table key: `LockID`
-
 
 4. Create a S3 bucket and the directories structure required to store Terraform statefile
 
@@ -125,25 +124,24 @@ s3://<S3_BUCKET_NAME>/Task/<APPLICATION_ENVIRONMENT_NAME>/cloud
 s3://<S3_BUCKET_NAME>/Task/<APPLICATION_ENVIRONMENT_NAME>/stateful-application
 ```
 
-5. Create the Terraform configuration file
+5. Create the Terraform configuration file for the `cloud` platform:
 
 ```
-platform/cloud/vars_<APPLICATION_ENVIRONMENT_NAME>.tfvars
-platform/stateful-app/vars_<APPLICATION_ENVIRONMENT_NAME>.tfvars
+$ touch platform/cloud/vars_<APPLICATION_ENVIRONMENT_NAME>.tfvars
 ```
 
 6. Create the infrastructure
 
-Run the following commands will deploy the application:
+Run the following commands to deploy the application:
 
 ```bash
 # Init and deploy the cloud platform level
-$ make init aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
-$ make apply aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
+$ make init aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
+$ make apply aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
 
 # Init and deploy the stateful-application platform level
-$ make init aws_profile=<AWS_PROFILE_NAME> app_env=junior-h platform=stateful-application
-$ make apply aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateful-application
+$ make init aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateful-application
+$ make apply aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateful-application
 ```
 
 7. Build Ansible docker image
@@ -165,21 +163,6 @@ $ make provision-wordpress aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_E
 9. Checking the application was correctly deployed
 
 Open your browser in `http://<WORDPRESS_SERVER_PUBLIC_IP_ADDRESS>/` to confirm the app is working.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## The stateless application
 
@@ -231,7 +214,7 @@ Note: This key pair will allow you to connecto to the EC2 instances to trorubles
 
 1. Crear AWS CLI profile
 
-```
+```bash
 $ aws configure --profile <PROFILE_NAME>
 ```
 
@@ -239,7 +222,6 @@ $ aws configure --profile <PROFILE_NAME>
 
 - Table name: `terraform_states`
 - Table key: `LockID`
-
 
 4. Create a S3 bucket and the directories structure required to store Terraform statefile
 
@@ -250,42 +232,35 @@ s3://<S3_BUCKET_NAME>/Task/<APPLICATION_ENVIRONMENT_NAME>/cloud
 s3://<S3_BUCKET_NAME>/Task/<APPLICATION_ENVIRONMENT_NAME>/stateful-application
 ```
 
-5. Create the Terraform configuration file
+5. Create the Terraform configuration file for the `cloud` platform:
 
-```
-platform/cloud/vars_<APPLICATION_ENVIRONMENT_NAME>.tfvars
+```bash
+$ touch platform/cloud/vars_<APPLICATION_ENVIRONMENT_NAME>.tfvars
 ```
 
 6. Create the infrastructure
 
-Run the following commands will deploy the application:
+Run the following commands to deploy the application:
 
 ```bash
 # Init and deploy the cloud platform level
-$ make init aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
-$ make apply aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
+$ make init aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
+$ make apply aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
 
 # Init and deploy the stateful-application platform level
-$ make init aws_profile=<AWS_PROFILE_NAME> app_env=junior-h platform=stateful-application
-$ make apply aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateful-application
+$ make init aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=APPLICATION_ENVIRONMENT_NAME> platform=stateless-application
+$ make apply aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateless-application
 ```
 
-7. Build Ansible docker image
+7. Checking the application was correctly deployed
 
-```bash
-# build image
-$ make ansible-build
+The result of the las command should be something like this:
+
+```text
+...
+Outputs:
+
+ecs_alb_public_dns = ecs-load-balancer-318411130.us-east-1.elb.amazonaws.com
 ```
 
-8. Provision Wordpress and MySQL servers
-
-```bash
-# Run provisioning
-$ make provision-wordpress aws_profile=<AWS_PROFILE_NAME> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateful-application
-```
-
-**Note:** Wait at least 90 seconds after deploying the servers before running this step. Otherwise Ansible won't find them and will throw an error message.
-
-9. Checking the application was correctly deployed
-
-Open your browser in `http://<WORDPRESS_SERVER_PUBLIC_IP_ADDRESS>/` to confirm the app is working.
+Open the address in your browser and confirm that Wordpress has been properly installed.
