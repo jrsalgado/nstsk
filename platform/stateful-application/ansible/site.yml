@@ -1,0 +1,12 @@
+---
+- hosts: mysql_servers
+  user: ubuntu
+  become: yes
+  roles:
+    - mysql
+
+- hosts: wordpress_servers
+  user: ubuntu
+  become: yes
+  roles:
+    - wordpress

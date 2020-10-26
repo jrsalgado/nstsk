@@ -1,0 +1,89 @@
+---
+- name: Install php dependencies
+  apt:
+    name:
+      - php-curl
+      - php-gd
+      - php-mbstring
+      - php-xml
+      - php-xmlrpc
+      - php-soap
+      - php-intl
+      - php-zip
+      - apache2
+      - libapache2-mod-php
+      - php-mysql
+    state: present
+    update_cache: yes
+
+- name: Remove apache2 default virtualhost
+  file:
+    path: "/etc/apache2/sites-enabled/000-default.conf"
+    state: absent
+
+- name: Set wordpress virtualhost file
+  template:
+    src: apache-wordpress.conf
+    dest: /etc/apache2/sites-available/wordpress.conf
+    mode: 0744
+
+- name: Enable php module for apache
+  apache2_module:
+    state: present
+    name: php7_module
+    identifier: php7_module
+
+- name: Start and enable apache service
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+
+- name: Enable apache virtualhost
+  file:
+    src: /etc/apache2/sites-available/wordpress.conf
+    dest: /etc/apache2/sites-enabled/wordpress.conf
+    owner: www-data
+    group: www-data
+    state: link
+  notify:
+    - restart apache2
+
+- name: Download wordpress
+  get_url:
+    url: "https://wordpress.org/wordpress-5.5.1.tar.gz"
+    dest: /tmp/wordpress.tar.gz
+    mode: '0440'
+    checksum: "sha1:d3316a4ffff2a12cf92fde8bfdd1ff8691e41931"
+  notify: reload apache2
+  register: download_wordpress
+
+- name: Wait for the downloaded wordpress to be available in the filesystem
+  pause:
+    seconds: 5
+  when: download_wordpress.changed
+
+- name: Extract wordpress.tar.gz
+  unarchive:
+    src: /tmp/wordpress.tar.gz
+    remote_src: yes
+    dest: /var/www
+    mode: 0755
+  when: download_wordpress.changed
+
+- name: Set wordpress configuration file
+  template:
+    src: wp-config.php
+    dest: /var/www/wordpress/wp-config.php
+    mode: 0744
+  notify:
+    - restart apache2
+
+- name: Set wordpress directory ownership
+  file:
+    path: /var/www/wordpress
+    state: directory
+    mode: 0755
+    owner: www-data
+    group: www-data
+

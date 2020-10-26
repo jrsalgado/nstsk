@@ -8,3 +8,8 @@ output "private_subnets" {
   description = "Is the list of privates subnets"
 }
 
+output "vpc_main" {
+  value       = module.network.vpc_main
+  description = "Is the main VPC"
+}
+
