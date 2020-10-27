@@ -3,7 +3,7 @@ plugin: aws_ec2
 boto_profile: junior-h
 
 regions:
-  - us-east-1
+  - AWS_REGION_TO_REPLACE
 
 strict: False
 
