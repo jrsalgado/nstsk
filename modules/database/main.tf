@@ -34,7 +34,7 @@ resource "aws_security_group" "rds" {
 resource "aws_db_instance" "wordpress_db" {
   name                   = "${var.name}"
   allocated_storage      = 10
-  identifier_prefix      = "mysql-${var.app_env}"
+  identifier_prefix      = "${var.app_env}-mysql"
   storage_type           = "gp2"
   engine                 = "mysql"
   engine_version         = var.release_version
