@@ -1,5 +1,5 @@
 resource "aws_alb" "ecs_load_balancer" {
-  name            = "${var.app_env}-ecs_load_balancer"
+  name            = "${var.app_env}-ecs-load-balancer"
   security_groups = [aws_security_group.alb_sg.id]
   subnets         = var.public_subnets
 
@@ -9,7 +9,7 @@ resource "aws_alb" "ecs_load_balancer" {
 }
 
 resource "aws_alb_target_group" "ecs_target_group" {
-  name     = "${var.app_env}-ecs_target_group"
+  name     = "${var.app_env}-ecs-target-group"
   port     = "80"
   protocol = "HTTP"
   vpc_id   = var.vpc_id

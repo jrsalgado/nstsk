@@ -1,5 +1,5 @@
 resource "aws_security_group" "ecs_instances_sg" {
-  name        = "${var.app_env}-ecs_sg"
+  name        = "${var.app_env}-ecs-sg"
   description = "ECS instances security group"
   vpc_id      = var.vpc_id
 
@@ -21,7 +21,7 @@ resource "aws_security_group" "ecs_instances_sg" {
 
 
 resource "aws_security_group" "alb_sg" {
-  name        = "${var.app_env}-alb_sg"
+  name        = "${var.app_env}-alb-sg"
   description = "ALB security group"
   vpc_id      = var.vpc_id
 
