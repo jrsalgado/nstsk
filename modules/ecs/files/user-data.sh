@@ -1,3 +1,5 @@
 #!/bin/bash
 
-echo ECS_CLUSTER=${ecs_cluster} >> /etc/ecs/ecs.config
+cat << EOF > /etc/ecs/ecs.config
+ECS_CLUSTER=${ecs_cluster}
+EOF
