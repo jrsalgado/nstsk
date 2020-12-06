@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "wordpress" {
-  name                 = "wordpress"
+  name                 = "${var.app_env}-wordpress"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {

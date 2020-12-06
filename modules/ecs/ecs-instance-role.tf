@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs_intance_role" {
-  name               = "ecs-intance-role"
+  name               = "${var.app_env}-ecs_intance_role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.ecs_instance_policy.json
 }
@@ -21,7 +21,7 @@ resource "aws_iam_role_policy_attachment" "ecs_intance_role-attachment" {
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_profile" {
-  name = "ecs-instance-profile"
+  name = "${var.app_env}-ecs_instance_profile"
   path = "/"
   role = aws_iam_role.ecs_intance_role.id
   #    provisioner "local-exec" {

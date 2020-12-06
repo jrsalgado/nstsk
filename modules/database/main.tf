@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "default" {
-  name       = "main"
+  name       = "${var.app_env}-default_subnet_group"
   subnet_ids = var.private_subnets
 
   tags = {
@@ -8,7 +8,7 @@ resource "aws_db_subnet_group" "default" {
 }
 
 resource "aws_security_group" "rds" {
-  name        = "rds-sg"
+  name        = "${var.app_env}-rds_sg"
   description = "RDS Security Group"
   vpc_id      = var.vpc_id
 
@@ -32,13 +32,13 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_db_instance" "wordpress_db" {
+  name                   = "${var.app_env}-${var.name}"
   allocated_storage      = 10
-  identifier_prefix      = "mysql-${var.app_env}"
+  identifier_app_env     = "mysql-${var.app_env}"
   storage_type           = "gp2"
   engine                 = "mysql"
   engine_version         = var.release_version
   instance_class         = var.instance_class
-  name                   = var.name
   username               = var.username
   password               = var.password
   db_subnet_group_name   = aws_db_subnet_group.default.name

@@ -1,5 +1,5 @@
 resource "aws_launch_configuration" "ecs_launch_configuration" {
-  name_prefix          = "ecs_launch_configuration"
+  name_prefix          = "${var.app_env}-ecs_launch_configuration"
   image_id             = var.ami_id
   instance_type        = var.instance_type
   iam_instance_profile = aws_iam_instance_profile.ecs_instance_profile.id

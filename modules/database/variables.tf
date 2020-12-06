@@ -47,4 +47,3 @@ variable "sg_id_ingress" {
   type        = string
   description = "ID of the security group to use for filtering incomming connections"
 }
-
