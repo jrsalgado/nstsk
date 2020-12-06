@@ -5,3 +5,7 @@ variable "aws_profile" {
 variable "app_env" {
   default = "dev"
 }
+
+variable "aws_region" {
+  type = string
+}
