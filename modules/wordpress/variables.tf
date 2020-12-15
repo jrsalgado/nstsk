@@ -25,12 +25,12 @@ variable "size" {
 }
 
 variable "private_subnets" {
-  type        = list
+  type        = list(string)
   description = "A list of subnet IDs to launch resources in"
 }
 
 variable "public_subnets" {
-  type        = list
+  type        = list(string)
   description = "A list of subnet IDs to launch resources in"
 }
 
