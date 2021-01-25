@@ -10,6 +10,7 @@
       - [1. Wordpress](#1-wordpress)
       - [2. MySQL](#2-mysql)
     - [Deployment](#deployment)
+- [- Table key: `LockID`](#--table-key-lockid)
   - [The stateless application](#the-stateless-application)
     - [General information](#general-information-1)
       - [1. ECS Cluster](#1-ecs-cluster)
@@ -118,11 +119,10 @@ $ aws configure --profile <PROFILE_NAME>
 
 - Table name: `terraform_states`
 - Table key: `LockID`
-=======
 
 4. Create a S3 bucket and the directories structure required to store Terraform statefile
 
-Create the following directories in the bucket. Repeat per `<PLATFORM_NAME>`.
+Create the following directories in the bucket. Repeat per `<AWS_PLATFORM_NAME>`.
 
 ```text
 s3://<S3_BUCKET_NAME>/Task/<APPLICATION_ENVIRONMENT_NAME>/cloud
@@ -201,26 +201,23 @@ Follow these steps to deploy the application:
 1. Generate a public/private key pair.
 
 ```bash
-$ cd platform/stateless-application
-$ ssh-keygen -t rsa -b 4096 -N "" -f files/id_rsa_evaluator
+$ ssh-keygen -t rsa -b 4096 -N "" -f platform/stateless-application/files/id_rsa_evaluator
 ```
 
-These commands create the key pairs under `files` directory:
+These commands create a key pair under `files` directory:
 
 ```bash
-$ ls -1a files/
-.
-..
-id_rsa_evaluator
-id_rsa_evaluator.pub
+$ ls -l1 platform/stateless-application/files/id_rsa_evaluator*
+files/id_rsa_evaluator
+files/id_rsa_evaluator.pub
 ```
 
-Note: This key pair will allow you to connecto to the EC2 instances to trorubleshoot issues with ECS. It will require an update to to the security group of the EC2 instances.
+This key pair will allow you to connecto to the EC2 instances to trorubleshoot issues with ECS. It will require an update to to the security group of the EC2 instances.
 
-1. Crear AWS CLI profile
+2. Crear AWS CLI profile
 
 ```bash
-$ aws configure --profile <PROFILE_NAME>
+$ aws configure --profile <PPROFILE_NAME>
 ```
 
 3. Create a DynamoDB table for `cloud` to allow locking the statefile while running Terraform:
@@ -230,7 +227,7 @@ $ aws configure --profile <PROFILE_NAME>
 
 4. Create a S3 bucket and the directories structure required to store Terraform statefile
 
-Create the following directories in the bucket. Repeat per `<PLATFORM_NAME>`.
+Create the following directories in the bucket. Repeat per `<AWS_PLATFORM_NAME>`.
 
 ```text
 s3://<S3_BUCKET_NAME>/Task/<APPLICATION_ENVIRONMENT_NAME>/cloud
@@ -253,19 +250,67 @@ $ make init aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPL
 $ make apply aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
 
 # Init and deploy the stateful-application platform level
-$ make init aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=APPLICATION_ENVIRONMENT_NAME> platform=stateless-application
+$ make init aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateless-application
 $ make apply aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateless-application
 ```
 
-7. Checking the application was correctly deployed
+7. Upload the wordpress docker image:
 
-The result of the las command should be something like this:
+The Terraform code deploys all he infrastructure, except for the wordpress docker image in the ECR repository. It was implemented this way so the candidate could create the docker image and upload it to ECR after running some optimizations.
+
+7.1. Download the latest release of the Wordpress on your local box:
+
+```bash
+$ docker pull wordpress
+```
+
+7.2. Push the dockek image to ECR:
+
+- Open the AWS console in your browser: https://console.aws.amazon.com/ecr/repositories?#
+
+- Click on the ECR repository whose name matches: `<ENVIRONMENT_NAME>-wordpress`
+
+- Click on `View push commands`
+- Run the provided commands from your local box, excepting the `docker build`.
+
+8. Check the application was deployed correctly:
+
+The result of the last command should be something like this:
 
 ```text
 ...
 Outputs:
 
-ecs_alb_public_dns = ecs-load-balancer-318411130.us-east-1.elb.amazonaws.com
+ecs_alb_public_dns = http://ecs-load-balancer-318411130.us-east-1.elb.amazonaws.com
 ```
 
 Open the address in your browser and confirm that Wordpress has been properly installed.
+
+### Undeployment
+
+To undeploy the application run `terraform destroy` in reverse of the creation of the infrastructure:
+
+```bash
+$ make destroy aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=stateless-application
+$ make destroy aws_profile=<AWS_PROFILE_NAME> aws_region=<AWS_REGION> app_env=<APPLICATION_ENVIRONMENT_NAME> platform=cloud
+```
+
+It is very important to undeploy the infrastructure after finishing an interview to avoid paying for unused infrastructure. 
+
+### Suggested changes to the infrastructure to evaluate candidates
+
+#### Optimize the provided Wordpress' Dockerfile
+
+Ask the candidate to optimize the Docker image size of the Docker image in [Dockerfile.bad](platform/stateless-application/files/Dockerfile.bad).
+
+Download the file and send the docker dile to the candidate by email.
+
+The fixed Dockerfile is here [Dockerfile.good](platform/stateless-application/files/Dockerfile.good)
+
+#### Break the ECS cluster tasks definition
+
+Make changes so the task definition and ask the candidate to troubleshoot the issue
+
+#### Break the Security Group providing access to the database
+
+Change the Security Group access rule providing access to the database and ask the candidate to trouble 
