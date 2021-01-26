@@ -10,13 +10,17 @@
       - [1. Wordpress](#1-wordpress)
       - [2. MySQL](#2-mysql)
     - [Deployment](#deployment)
-- [- Table key: `LockID`](#--table-key-lockid)
   - [The stateless application](#the-stateless-application)
     - [General information](#general-information-1)
       - [1. ECS Cluster](#1-ecs-cluster)
       - [2. MySQL RDS instance](#2-mysql-rds-instance)
       - [3. Application Load Balancer](#3-application-load-balancer)
     - [Deployment](#deployment-1)
+    - [Undeployment](#undeployment)
+    - [Suggested changes to the infrastructure to evaluate candidates](#suggested-changes-to-the-infrastructure-to-evaluate-candidates)
+      - [Optimize the provided Wordpress' Dockerfile](#optimize-the-provided-wordpress-dockerfile)
+      - [Break the ECS cluster tasks definition](#break-the-ecs-cluster-tasks-definition)
+      - [Break the Security Group providing access to the database](#break-the-security-group-providing-access-to-the-database)
 
 ## Platform Levels
 
