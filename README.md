@@ -273,9 +273,22 @@ $ docker pull wordpress
 - Click on `View push commands`
 - Run the provided commands from your local box, excepting the `docker build`.
 
-8. Check the application was deployed correctly:
+9. Update the docker images by the cluster
 
-The result of the last command should be something like this:
+- Open https://console.aws.amazon.com/ecs/home?#/taskDefinitions
+
+- Click on wordpress.
+- Click on `Actions`
+- Click on `Update Service`
+- Click on `Next step` three times.
+- Click on `Update Service`.
+- Wait around 3 minutes and then check the `Tasks` tab to confirm the tasks in `RUNNING` state.
+
+
+
+10. Check the application was deployed correctly:
+
+Check the output of the last `make` command and open the provided URL in your browser:
 
 ```text
 ...
@@ -283,8 +296,6 @@ Outputs:
 
 ecs_alb_public_dns = http://ecs-load-balancer-318411130.us-east-1.elb.amazonaws.com
 ```
-
-Open the address in your browser and confirm that Wordpress has been properly installed.
 
 ### Undeployment
 
